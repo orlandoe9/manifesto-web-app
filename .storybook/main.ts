@@ -14,8 +14,5 @@ const config: StorybookConfig = {
   core: {
     builder: '@storybook/builder-webpack5',
   },
-  docs: {
-    autodocs: 'tag',
-  },
 };
 export default config;
