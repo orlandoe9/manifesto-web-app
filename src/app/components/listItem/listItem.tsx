@@ -28,7 +28,7 @@ export default function ListItem(user: User) {
     <>
       <main className="flex flex-col items-center sm:bg-bgWeb w-4/5 max-sm:w-full">
         <div className=" font-montserrat text-white flex flex-row justify-between items-center w-1/2">
-          <h1 className="">{Name}</h1>
+          <h1>{Name}</h1>
           <div className=" w-20">
             <button
               className=" pr-4 w-auto h-auto"

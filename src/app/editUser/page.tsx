@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import back from '../../../public/back.svg';
+import back from '../../../public/img/Back.svg';
 import UserForm from '../components/contactForm/ContactForm';
 
 export default function Page() {

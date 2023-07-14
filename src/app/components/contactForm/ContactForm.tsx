@@ -19,6 +19,7 @@ export default function ContactForm({ sampleTextProp }: IUserForm) {
   const [emergencyPhone, setEmergencyPhone] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const [disable, setDisable] = useState(true);
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -264,22 +265,6 @@ export default function ContactForm({ sampleTextProp }: IUserForm) {
 
         <button
           className={`text-lg font-500 ${inter.className} font-sans text-[var(--text-color)] items-center text-center bg-[var(--signUpBox-color)] w-44 h-12`}
-          type="submit"
-          disabled={
-            !isFormValid ||
-            nameError.includes(
-              'Must be 2-12 characters long and have no special characters.'
-            ) ||
-            phoneError.includes('Must enter 10 digit number.') ||
-            phoneError.includes('should only contain digits') ||
-            emailError.includes('Email is invalid') ||
-            emergencyNameError.includes(
-              'Must be 2-12 characters long and have no special characters.'
-            ) ||
-            emergencyPhoneError.includes('Must enter 10 digit number.') ||
-            emergencyPhoneError.includes('should only contain digits')
-          }
-          onClick={handleSubmit}
         >
           Save and Sign
         </button>
