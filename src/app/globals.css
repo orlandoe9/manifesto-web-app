@@ -7,6 +7,10 @@
   --header-color: #1f1f39;
   --logo-color: #eea86c;
   --text-color: #ffff;
-  --bg2-color: #9393aa;
+  --bgsignIn-color: #9393aa;
+  --bg2signIn-color: #f5f5f5;
   --lines-color: #979797;
+  --infoBox-color: #1f1f39;
+  --signUpBox-color: #838bc8;
+  --placeHolder-color: #b1b8c7;
 }

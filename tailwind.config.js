@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors');
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -13,10 +14,17 @@ module.exports = {
         sans: ['var(--font-oldStandard)'],
         mono: ['var(--font-roboto-mono)'],
         colors: {
-          'bg-color': 'var(--bg-color)',
-          'header-color': 'var(--header-color)',
-          'logo-color': 'var(--logo-color)',
-          'text-color': 'var(--text-color)',
+          bgColor: '#19192e',
+          headerColor: '#1f1f39',
+          logocolor: '#eea86c',
+          bgsignIncolor: '#9393aa',
+          bg2signIncolor: '#f5f5f5',
+          linescolor: '#979797',
+          signUpBoxcolor: '#1f1f39',
+        },
+        backgroundImage: {
+          manifestoMobile: "url('public/img/Manifesto.svg')",
+          manifestoMobile2: "url('public/img/BgBottom.svg')",
         },
       },
     },

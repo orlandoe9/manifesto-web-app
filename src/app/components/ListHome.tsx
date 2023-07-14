@@ -21,9 +21,15 @@ export default function Main() {
           className={`${montserrat.className} font-sans text-[18px] text-center items-center flex flex-col [var(--text-color)] `}
         >
           <li className="flex">
-            Dobby the Elf
-            <button id="edit" className="mx-auto">
-              <Image src="./img/Edit.svg" alt={''} width={30} height={30} />
+            <span className="">Dobby the Elf</span>
+            <button id="edit" className="">
+              <Image
+                className="flex right-0"
+                src="./img/Edit.svg"
+                alt={''}
+                width={30}
+                height={30}
+              />
             </button>
             <button id="edit" className="">
               <Image src="./img/Delete.svg" alt={''} width={30} height={30} />

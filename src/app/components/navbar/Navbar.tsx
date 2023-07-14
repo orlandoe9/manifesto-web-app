@@ -18,13 +18,13 @@ export default function Navbar() {
             &#9776;
           </button>
           <h1
-            className={`${oldStandard.className} text-[30px] text-center text-[var(--logo-color)]`}
+            className={`${oldStandard.className} font-medium text-[33px] text-center md:text-left md:mx-32 text-[var(--logo-color)]`}
           >
             M
           </h1>
         </div>
         <h2
-          className={`${openSans.className} font-sans text-center text-[var(--text-color)]`}
+          className={`${openSans.className} font-sans text-center md:text-left md:mx-28 text-[var(--text-color)]`}
         >
           Manifesto
         </h2>
