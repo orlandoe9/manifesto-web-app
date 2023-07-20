@@ -7,4 +7,8 @@ const meta: Meta<typeof ListItem> = {
 export default meta;
 type Story = StoryObj<typeof ListItem>;
 
-export const Primary: Story = {};
+export const Primary: Story = {
+  // args: {
+  //   sampleTextProp: 'Sample text',
+  // } as IListItem,
+};

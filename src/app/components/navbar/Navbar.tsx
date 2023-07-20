@@ -9,8 +9,11 @@ const oldStandard = Old_Standard_TT({
 export default function Navbar() {
   return (
     <>
-      <div className="sticky mx-auto w-full h-fit bg-[var(--header-color)]">
-        <div className="">
+      <div
+        className="sticky mx-auto w-full h-fit bg-[var(--header-color)] shadow-md
+"
+      >
+        <div>
           <button
             id="mobile-menu"
             className="absolute top-2 text-[40px] px-[30px] text-[var(--text-color)]"

@@ -8,6 +8,10 @@ export interface IListItem {
   sampleTextProp: string;
 }
 
+export interface IListItem {
+  sampleTextProp: string;
+}
+
 export default function ListItem(user: User) {
   const router = useRouter();
   const { id, Name } = user;
@@ -24,10 +28,15 @@ export default function ListItem(user: User) {
     localStorage.setItem('editId', id.toString());
     window.location.href = '/editUser';
   };
+  const handleDelete = (index: number) => {
+    // Display a confirmation dialog to the user
+    const confirmDelete = window.confirm('Continue to delete ' + Name + ' ? ');
+    remove(id);
+  };
   return (
     <>
-      <main className="flex flex-col items-center sm:bg-bgWeb w-4/5 max-sm:w-full">
-        <div className=" font-montserrat text-white flex flex-row justify-between items-center w-1/2">
+      <main className="flex flex-col items-center  w-4/5 max-sm:w-full">
+        <div className=" font-montserrat text-white flex flex-row justify-between items-center w-2/3 ">
           <h1>{Name}</h1>
           <div className=" w-20">
             <button
@@ -39,18 +48,12 @@ export default function ListItem(user: User) {
               <Image src={edit} alt={'edit icon'}></Image>
             </button>
 
-            <button
-              className=" w-auto h-auto"
-              onClick={() => {
-                remove(id);
-                router.refresh();
-              }}
-            >
+            <button className=" w-auto h-auto" onClick={() => handleDelete(id)}>
               <Image src={deleteIcon} alt={'delete icon'}></Image>
             </button>
           </div>
         </div>
-        <div className=" max-md:w-5/6 h-px m-3 bg-slate-700 self-center sm:w-7/12"></div>
+        <hr className=" mx-auto border-[#979797] h-full  w-2/3 m-3" />
       </main>
     </>
   );

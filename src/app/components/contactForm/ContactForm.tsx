@@ -1,24 +1,35 @@
 'use client';
-import { Inter, Montserrat } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { User } from '../../../../types';
+import Input from '../InputForm/Input';
+
+const inter = Inter({ subsets: ['latin'] });
 export interface IUserForm {
   sampleTextProp: string;
 }
-
-const inter = Inter({ subsets: ['latin'] });
-const montserrat = Montserrat({ subsets: ['latin'] });
+interface FormData {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  mail: string;
+  emergencyName: string;
+  emergencyPhone: string;
+}
 
 export default function ContactForm({ sampleTextProp }: IUserForm) {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [emergencyName, setEmergencyName] = useState('');
-  const [emergencyPhone, setEmergencyPhone] = useState('');
-  const [isFormValid, setIsFormValid] = useState(false);
-
+  const [formData, setFormData] = useState<FormData>({
+    id: -1,
+    name: '',
+    phoneNumber: '',
+    mail: '',
+    emergencyName: '',
+    emergencyPhone: '',
+  });
+  const [btnTitle, setButtonTitle] = useState('Save and Sign');
+  const [firstChange, setFirstChange] = useState(false);
   const [disable, setDisable] = useState(true);
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
@@ -26,41 +37,12 @@ export default function ContactForm({ sampleTextProp }: IUserForm) {
   const [emergencyNameError, setEmergencyNameError] = useState('');
   const [emergencyPhoneError, setEmergencyPhoneError] = useState('');
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setName(inputValue);
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setPhone(inputValue);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setEmail(inputValue);
-  };
-
-  const handleEmergencyNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const inputValue = e.target.value;
-    setEmergencyName(inputValue);
-  };
-
-  const handleEmergencyPhoneChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const inputValue = e.target.value;
-    setEmergencyPhone(inputValue);
-  };
-
-  const handleNameBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (
       !/^[a-z ,.'-]+$/i.test(e.target.value) ||
-      name.length < 2 ||
+      e.target.value.length < 2 ||
       !/^[a-z ,.'-]+$/i.test(e.target.value) ||
-      name.length > 12
+      e.target.value.length > 12
     ) {
       setNameError(
         'Must be 2-12 characters long and have no special characters.'
@@ -69,28 +51,28 @@ export default function ContactForm({ sampleTextProp }: IUserForm) {
       setNameError('');
     }
   };
-  const handlePhoneBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handlePhoneBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!/^[0-9]+$/.test(e.target.value)) {
-      setPhoneError('Phone should only contain digits');
-    } else if (phone.length !== 10) {
+      setPhoneError('Must enter 10 digit number.');
+    } else if (e.target.value.length !== 10) {
       setPhoneError('Must enter 10 digit number.');
     } else {
       setPhoneError('');
     }
   };
-  const handleEmailBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleEmailBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(e.target.value)) {
-      setEmailError('Email is invalid');
+      setEmailError(' We do not recognize that as an email. Try again.');
     } else {
       setEmailError('');
     }
   };
-  const handleEmergenyNameBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleEmergenyNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (
       !/^[a-z ,.'-]+$/i.test(e.target.value) ||
-      emergencyName.length < 2 ||
+      e.target.value.length < 2 ||
       !/^[a-z ,.'-]+$/i.test(e.target.value) ||
-      emergencyName.length > 12
+      e.target.value.length > 12
     ) {
       setEmergencyNameError(
         'Must be 2-12 characters long and have no special characters.'
@@ -99,172 +81,201 @@ export default function ContactForm({ sampleTextProp }: IUserForm) {
       setEmergencyNameError('');
     }
   };
-  const handleEmergencyPhoneBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleEmergencyPhoneBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!/^[0-9]+$/.test(e.target.value)) {
-      setEmergencyPhoneError('should only contain digits');
-    } else if (emergencyPhone.length !== 10) {
+      setEmergencyPhoneError('Phone should only contain digits');
+    } else if (e.target.value.length !== 10) {
       setEmergencyPhoneError('Must enter 10 digit number.');
     } else {
       setEmergencyPhoneError('');
     }
   };
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    // Perform your insert operation using the form data
-    var users: User[] = JSON.parse(
-      window.localStorage.getItem('users') || '[]'
-    );
-    if (window.localStorage.getItem('editId')) {
-      var editId = JSON.parse(window.localStorage.getItem('editId') || ' ');
-    }
-    let maxId: number;
-    if (users.length === 0) {
-      maxId = 0;
-    } else {
-      maxId = users[users.length - 1].id;
-    }
 
-    if (editId) {
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].id === editId) {
-          users[i].Name = name;
-          users[i].PhoneNumber = phone;
-          users[i].Email = email;
-          users[i].EmergenyContactname = emergencyName;
-          users[i].EmergencyContact = emergencyPhone;
-          window.localStorage.setItem('users', JSON.stringify(users));
-          window.localStorage.removeItem('editId');
-          window.location.href = '/';
-        }
-      }
+  const validateInput = () => {
+    if (
+      nameError &&
+      phoneError &&
+      emailError &&
+      emergencyNameError &&
+      emergencyPhoneError
+    ) {
+      setDisable(true);
     } else {
-      const user: User = {
-        id: maxId + 1,
-        Name: name,
-        PhoneNumber: phone,
-        Email: email,
-        EmergenyContactname: emergencyName,
-        EmergencyContact: emergencyPhone,
-      };
-      users.push(user);
-      window.localStorage.setItem('users', JSON.stringify(users));
-      console.log('user', user);
+      setDisable(false);
     }
-    router.push('/');
   };
 
-  const validateForm = () => {
-    let isValid = true;
-
-    setIsFormValid(isValid);
-    return (
-      name.trim() !== '' &&
-      phone.trim() !== '' &&
-      email.trim() !== '' &&
-      emergencyName.trim() !== '' &&
-      emergencyPhone.trim() !== ''
-    );
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFirstChange(true);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+    switch (name) {
+      case 'name':
+        console.log('Entering');
+        handleNameBlur(e);
+        break;
+      case 'phoneNumber':
+        handlePhoneBlur(e);
+        break;
+      case 'mail':
+        handleEmailBlur(e);
+        break;
+      case 'emergencyName':
+        handleEmergenyNameBlur(e);
+        break;
+      case 'emergencyPhone':
+        handleEmergencyPhoneBlur(e);
+        break;
+    }
   };
 
   useEffect(() => {
-    setIsFormValid(validateForm());
-  }, [name, phone, email, emergencyName, emergencyPhone]);
-  return (
-    <div className="flex flex-col  items-center justify-around h-4/6 w-10/12 lg:w-1/2 lg:h-5/6 bg-[var(--bg2signIn-color)] ">
-      <form className=" w-full h-full flex flex-col items-center justify-around">
-        <div
-          className={`${inter.className}  font-sans pt-8 text-center justify-center text-[var(--text-color)] `}
-        >
-          <input
-            type="text"
-            id="name"
-            className=" px-3 py-2 text-black bg-white border shadow-sm border-[var(--infoBox-color)] placeholder-[var(--placeHolder-color)] focus:outline-none block w-full rounded-md sm:text-sm focus:ring-1"
-            placeholder="Full Name"
-            value={name}
-            onChange={handleNameChange}
-            onBlur={handleNameBlur}
-          />
-          {nameError && (
-            <div className="text-red-600 text-xs font-inter p-1">
-              {nameError}
-            </div>
-          )}
-        </div>
-        <div
-          className={`${inter.className} font-sans pt-8 text-center justify-center text-[var(--text-color)] `}
-        >
-          <input
-            type="text"
-            id="phone"
-            className="mt-1 px-3 py-2 text-black bg-white border shadow-sm border-[var(--infoBox-color)] placeholder-[var(--placeHolder-color)] focus:outline-none block w-full rounded-md sm:text-sm focus:ring-1"
-            placeholder="Phone Number"
-            value={phone}
-            onChange={handlePhoneChange}
-            onBlur={handlePhoneBlur}
-          />
-          {phoneError && (
-            <div className="text-red-600 text-xs font-inter p-1">
-              {phoneError}
-            </div>
-          )}
-        </div>
-        <div
-          className={`${inter.className} font-sans pt-8 text-center justify-center text-[var(--text-color)] `}
-        >
-          <input
-            type="email"
-            id="email"
-            className="mt-1 px-3 py-2 text-black bg-white border shadow-sm border-[var(--infoBox-color)] placeholder-[var(--placeHolder-color)] focus:outline-none block w-full rounded-md sm:text-sm focus:ring-1"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
-            onBlur={handleEmailBlur}
-          />
-          {emailError && (
-            <div className="text-red-600 text-xs font-inter p-1">
-              {emailError}
-            </div>
-          )}
-        </div>
-        <div
-          className={`${inter.className} font-sans pt-8 text-center justify-center text-[var(--text-color)] `}
-        >
-          <input
-            type="text"
-            id="emergencyName"
-            className="mt-1 px-3 py-2 text-black bg-white border shadow-sm border-[var(--infoBox-color)] placeholder-[var(--placeHolder-color)] focus:outline-none block w-full rounded-md sm:text-sm focus:ring-1"
-            placeholder="Emergency Contact Name"
-            value={emergencyName}
-            onChange={handleEmergencyNameChange}
-            onBlur={handleEmergenyNameBlur}
-          />
-          {emergencyNameError && (
-            <div className="text-red-600 text-xs font-inter p-1">
-              {emergencyNameError}
-            </div>
-          )}
-        </div>
-        <div
-          className={`${inter.className} font-sans pt-8 text-center justify-center text-[var(--text-color)] `}
-        >
-          <input
-            type="text"
-            id="emergencyNumber"
-            className="mt-1 px-3 py-2 text-black bg-white border shadow-sm border-[var(--infoBox-color)] placeholder-[var(--placeHolder-color)] focus:outline-none block w-full rounded-md sm:text-sm focus:ring-1"
-            placeholder="Emergency Contact Number"
-            value={emergencyPhone}
-            onChange={handleEmergencyPhoneChange}
-            onBlur={handleEmergencyPhoneBlur}
-          />
-          {emergencyPhoneError && (
-            <div className="text-red-600 text-xs font-inter p-1">
-              {emergencyPhoneError}
-            </div>
-          )}
-        </div>
+    const edit = localStorage.getItem('Edit Id');
+    if (edit) {
+      setButtonTitle('Update');
+      const dataList = JSON.parse(localStorage.getItem('JSONList') ?? 'null');
+      for (let i = 0; i < dataList.length; i++) {
+        if (dataList[i].id == edit) {
+          setFormData(dataList[i]);
+          break;
+        }
+      }
+    }
+  }, []);
 
+  useEffect(() => {
+    if (!formData) {
+      return; // loading
+    }
+    if (!firstChange) {
+      return;
+    }
+    validateInput();
+  }, [formData]);
+
+  useEffect(() => {
+    if (!formData) {
+      return; // loading
+    }
+    if (!firstChange) {
+      return;
+    }
+    validateInput();
+  }, [formData]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (
+      !nameError &&
+      !phoneError &&
+      !emailError &&
+      !emergencyNameError &&
+      !emergencyPhoneError
+    ) {
+      var users: User[] = JSON.parse(
+        window.localStorage.getItem('users') || '[]'
+      );
+      if (window.localStorage.getItem('editId')) {
+        var editId = JSON.parse(window.localStorage.getItem('editId') || ' ');
+      }
+      let maxId: number;
+      if (users.length === 0) {
+        maxId = 0;
+      } else {
+        maxId = users[users.length - 1].id;
+      }
+      if (editId) {
+        for (let i = 0; i < users.length; i++) {
+          if (users[i].id === editId) {
+            users[i].Name = formData.name;
+            users[i].PhoneNumber = formData.phoneNumber;
+            users[i].Email = formData.mail;
+            users[i].EmergenyContactname = formData.emergencyName;
+            users[i].EmergencyContact = formData.emergencyPhone;
+            window.localStorage.setItem('users', JSON.stringify(users));
+            window.localStorage.removeItem('editId');
+            window.location.href = '/';
+          }
+        }
+      } else {
+        const user: User = {
+          id: maxId + 1,
+          Name: formData.name,
+          PhoneNumber: formData.phoneNumber,
+          Email: formData.mail,
+          EmergenyContactname: formData.emergencyName,
+          EmergencyContact: formData.emergencyPhone,
+        };
+        users.push(user);
+        window.localStorage.setItem('users', JSON.stringify(users));
+        console.log('user', user);
+      }
+      router.push('/');
+    }
+  };
+
+  return (
+    <div className=" flex flex-col items-center justify-around h-5/6 w-11/12 md:w-5/12 md:h-4/5 bg-[var(--bg2signIn-color)]">
+      <form
+        className="font-inter w-full h-full flex flex-col gap-y-0 items-center justify-around shadow-md bg-white "
+        onSubmit={handleSubmit}
+      >
+        <Input
+          name={'name'}
+          placeholder={'Full Name'}
+          value={formData.name}
+          error={nameError}
+          onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(e);
+          }}
+        />
+
+        <Input
+          name={'phoneNumber'}
+          placeholder={'Phone Number'}
+          value={formData.phoneNumber}
+          error={phoneError}
+          onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(e);
+          }}
+        />
+
+        <Input
+          name={'mail'}
+          placeholder={'Email'}
+          value={formData.mail}
+          error={emailError}
+          onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(e);
+          }}
+        />
+
+        <Input
+          name={'emergencyName'}
+          placeholder={'Emergency Contact Name'}
+          value={formData.emergencyName}
+          error={emergencyNameError}
+          onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(e);
+          }}
+        />
+
+        <Input
+          name={'emergencyPhone'}
+          placeholder={'Emergency Contact Number'}
+          value={formData.emergencyPhone}
+          error={emergencyPhoneError}
+          onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(e);
+          }}
+        />
         <button
-          className={`text-lg font-500 ${inter.className} font-sans text-[var(--text-color)] items-center text-center bg-[var(--signUpBox-color)] w-44 h-12`}
+          disabled={disable}
+          type="submit"
+          className="text-lg font-inter text-[var(--text-color)] items-center text-center bg-[var(--signUpBox-color)] w-44 h-12"
         >
           Save and Sign
         </button>

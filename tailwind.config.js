@@ -9,10 +9,11 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-montserrat)'],
-        sans: ['var(--font-openSans)'],
-        sans: ['var(--font-oldStandard)'],
-        mono: ['var(--font-roboto-mono)'],
+        sans: ['var(--font-sans)'],
+        montserrat: ['var(--font-montserrat)'],
+        openSans: ['var(--font-open-sans)'],
+        oldStandardTT: ['var(--font-old-standard-tt)'],
+        inter: ['var(--font-inter)'],
         colors: {
           bgColor: '#19192e',
           headerColor: '#1f1f39',
@@ -21,6 +22,7 @@ module.exports = {
           bg2signIncolor: '#f5f5f5',
           linescolor: '#979797',
           signUpBoxcolor: '#1f1f39',
+          errorColor: '#c01313',
         },
         backgroundImage: {
           manifestoMobile: "url('public/img/Manifesto.svg')",

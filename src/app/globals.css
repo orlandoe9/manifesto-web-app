@@ -8,9 +8,10 @@
   --logo-color: #eea86c;
   --text-color: #ffff;
   --bgsignIn-color: #9393aa;
-  --bg2signIn-color: #f5f5f5;
+  --inputField-color: #f5f5f5;
   --lines-color: #979797;
   --infoBox-color: #1f1f39;
   --signUpBox-color: #838bc8;
   --placeHolder-color: #b1b8c7;
+  --error-color: #c01313;
 }

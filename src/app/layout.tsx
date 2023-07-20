@@ -1,5 +1,32 @@
+import {
+  Inter,
+  Montserrat,
+  Old_Standard_TT,
+  Open_Sans,
+} from 'next/font/google';
 import Navbar from './components/navbar/Navbar';
 import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  weight: '500',
+});
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  variable: '--font-open-sans',
+  weight: '600',
+});
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  weight: '500',
+});
+const oldStandard = Old_Standard_TT({
+  subsets: ['latin'],
+  weight: '700',
+  variable: '--font-old-standard-tt',
+});
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,12 +39,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <html lang="en">
       <head />
-      <body>
+      <body
+        className={`${inter.variable} ${openSans.variable} ${montserrat.variable} ${oldStandard.variable} bg-[var(--bg-color)]`}
+      >
         <Navbar />
         {children}
       </body>
-    </>
+    </html>
   );
 }
